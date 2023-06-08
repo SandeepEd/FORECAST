@@ -1,13 +1,8 @@
 import React from 'react';
-import { forecastResponseUrls } from 'App';
 import { useForeCastContext } from '../context/ForecastProvider';
 import { GeoCodingService } from '../services/GeoCodingService';
 
-interface AddressFormProps {
-  setResponseUrl: React.Dispatch<React.SetStateAction<forecastResponseUrls | null>>;
-}
-
-const AddressForm: React.FC<AddressFormProps> = () => {
+const AddressForm: React.FC = () => {
 
   const [ address, setAddress ] = React.useState(``);
   const { setCoordinates } = useForeCastContext();

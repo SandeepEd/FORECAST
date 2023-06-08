@@ -1,30 +1,18 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { AxiosResponse } from 'axios';
 import { useQuery } from '@tanstack/react-query';
+import { ForecastApiUrlResult, ForecastResult } from '@types';
 import client from '../http';
 
 export class NationalWeatherService {
 
-  static getForecastApiUrl(latitude: number, longitude: number): Promise<AxiosResponse<any>> {
+  static getForecastApiUrl(latitude: number, longitude: number): Promise<AxiosResponse<ForecastApiUrlResult>> {
     return client.get(`https://api.weather.gov/points/${latitude},${longitude}`);
   }
 
-  static getForecast<T = any>(url: string): Promise<AxiosResponse<T>> {
+  static getForecast(url: string): Promise<AxiosResponse<ForecastResult>> {
     return client.get(url);
   }
 }
-
-// export const useGetForecast = (url: string) => useQuery({
-//   queryKey: [ `weather`, url ],
-//   // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-//   queryFn: () => NationalWeatherService.getForecast(url).then((res) => res.data),
-// });
-
-// export const useGetForecastApiUrl = (latitude: number, longitude: number) => useQuery({
-//   queryKey: [ `weather-api-url`, latitude, longitude ],
-//   queryFn: async () => await NationalWeatherService.getForecastApiUrl(latitude, longitude),
-// });
 
 export const useGetForecastApiUrl = (latitude: number | undefined, longitude: number | undefined) => useQuery(
   [ `weather-api-url`, latitude, longitude ],
@@ -38,10 +26,10 @@ export const useGetForecastApiUrl = (latitude: number | undefined, longitude: nu
   }
 );
 
-export const useGetForecast = (url: string) => useQuery(
+export const useGetForecast = (url: string | undefined) => useQuery(
   [ `weather`, url ],
   async () => {
-    const { data } = await NationalWeatherService.getForecast(url);
+    const { data } = url ? await NationalWeatherService.getForecast(url) : { data: null };
     return data;
   },
   {
