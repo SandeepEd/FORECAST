@@ -5,7 +5,7 @@ import { useGetForecast, useGetForecastApiUrl } from '../services/NationalWether
 interface IForeCastContext {
   coordinates: { lat: number, lon: number } | null;
   setCoordinates: React.Dispatch<React.SetStateAction<{ lat: number, lon: number } | null>>;
-  forecastData: ForecastResult | null| undefined;
+  dailyForecastData: ForecastResult | null| undefined;
   hourlyForecastData: ForecastResult | null| undefined;
 }
 
@@ -15,14 +15,14 @@ const ForeCastProvider = ({ children }: { children: ReactNode }) => {
   const [ coordinates, setCoordinates ] = React.useState<{ lat: number, lon: number } | null>(null);
 
   const { data: apiUrlData } = useGetForecastApiUrl(coordinates?.lat, coordinates?.lon);
-  const { data: dailyForecastData } = useGetForecast(apiUrlData?.properties?.forecastHourly);
-  const { data: forecastData } = useGetForecast(apiUrlData?.properties?.forecast);
+  const { data: hourlyForecastData } = useGetForecast(apiUrlData?.properties?.forecastHourly);
+  const { data: dailyForecastData } = useGetForecast(apiUrlData?.properties?.forecast);
 
   return <ForeCastContext.Provider value={{
     coordinates,
     setCoordinates,
-    hourlyForecastData: dailyForecastData,
-    forecastData,
+    hourlyForecastData,
+    dailyForecastData,
   }}>
     {children}
   </ForeCastContext.Provider>;

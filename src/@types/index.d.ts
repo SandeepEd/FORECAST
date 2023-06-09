@@ -16,7 +16,7 @@ export interface ForecastApiUrlResult {
   };
 }
 
-export interface Periods {
+export interface Period {
   number: number;
   name: string;
   startTime: string;
@@ -26,6 +26,14 @@ export interface Periods {
   temperatureUnit: string;
   windSpeed: string;
   windDirection: string;
+  probabilityOfPrecipitation: {
+    value: number;
+    unitCode: string;
+  };
+  dewpoint: {
+    value: number;
+    unitCode: string;
+  };
   relativeHumidity: {
     value: number;
     unitCode: string;
@@ -37,6 +45,6 @@ export interface Periods {
 
 export interface ForecastResult {
   properties: {
-    periods: Periods[];
+    periods: Period[];
   };
 }

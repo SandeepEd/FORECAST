@@ -5,4 +5,5 @@
 html {
   @apply bg-black;
   @apply text-white;
+  @apply font-sans;
 }
