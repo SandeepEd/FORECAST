@@ -74,31 +74,21 @@ const ForecastCard: React.FC<{ periods: Period[], handleOnClick: (date: string) 
                   alt="Day/Night icon" />
 
               </div>
-              {/* <div className="font-bold text-l mb-2">{period.name}</div>
-              <img className="w-3 h-3 ml-2 filter invert"
-                src={period.name.toLowerCase().includes(`night`) ? nightIcon : dayIcon}
-                alt="Day/Night icon" /> */}
               <div className="py-2">
-                <span className="inline-block bg-gray-700 rounded-full px-2 py-1 text-l font-semibold
-                            text-gray-200 mr-2 mb-2">
-                  T: {period.temperature}°{period.temperatureUnit}
-                </span>
-                <span className="inline-block bg-gray-700 rounded-full px-2 py-1 text-xs font-semibold
-                            text-gray-200 mr-2 mb-2">
-                  W: {period.windSpeed} {period.windDirection}
-                </span>
-                <span className="inline-block bg-gray-700 rounded-full px-2 py-1 text-sm font-semibold
-                            text-gray-200 mr-2 mb-2">
-                  P: {period.probabilityOfPrecipitation.value}%
-                </span>
-                <span className="inline-block bg-gray-700 rounded-full px-2 py-1 text-sm font-semibold
-                            text-gray-200 mr-2 mb-2">
-                  H: {period.relativeHumidity.value}%
-                </span>
+                <DailyForecastItem value={`T: ${period.temperature}°${period.temperatureUnit}`} />
+                <DailyForecastItem value={`W: ${period.windSpeed} ${period.windDirection}`} />
+                <DailyForecastItem value={`P: ${period.probabilityOfPrecipitation.value}%`} />
+                <DailyForecastItem value={`H: ${period.relativeHumidity.value}%`} />
               </div>
               <p className="text-xs">{period.shortForecast}</p>
             </div>
           </div>)}
       </div>;
 
-export default DailyForecast;
+const DailyForecastItem: React.FC<{ value: string }> = ({ value }) =>
+  <span className="inline-block bg-gray-700 rounded-full px-2 py-1 text-l font-semibold
+text-gray-200 mr-2 mb-2">
+    {value}
+  </span>;
+
+export { DailyForecast, dayIcon, nightIcon };

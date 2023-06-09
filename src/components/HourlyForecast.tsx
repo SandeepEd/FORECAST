@@ -6,21 +6,21 @@ import { useForeCastContext } from '../context/ForecastProvider';
 const dates = Array.from({ length: 7 }, (_, i) => dayjs().add(i, `day`).format(`YYYY-MM-DD`));
 
 const HourlyForecast: React.FC<{ selectedDay: string }> = ({ selectedDay }) => {
-  const { hourlyForecastData: weatherData } = useForeCastContext();
+  const { hourlyForecastData } = useForeCastContext();
   const [ selectedDate, setSelectedDate ] = useState(selectedDay);
-  const [ filteredData, setFilteredData ] = useState<Period[]>([]);
+  const [ filteredHourlyData, setFilteredHourlyData ] = useState<Period[]>([]);
 
   useEffect(() => {
-    if (weatherData) {
-      const filtered = weatherData.properties.periods.filter((period: any) => {
+    if (hourlyForecastData) {
+      const filtered = hourlyForecastData.properties.periods.filter((period: any) => {
         const periodDate = dayjs(period.startTime).format(`YYYY-MM-DD`);
         return periodDate === selectedDate;
       });
-      setFilteredData(filtered);
+      setFilteredHourlyData(filtered);
     }
-  }, [ weatherData, selectedDate ]);
+  }, [ hourlyForecastData, selectedDate ]);
 
-  if (!weatherData) {
+  if (!hourlyForecastData) {
     return null;
   }
 
@@ -35,31 +35,40 @@ const HourlyForecast: React.FC<{ selectedDay: string }> = ({ selectedDay }) => {
         {dates.map(date =>
           <option key={date} value={date}>{date}</option>)}
       </select>
-      <div className="grid grid-cols-3 gap-4">
-        {// ...
+      <div className="grid grid-cols-1 gap-4">
+        {filteredHourlyData.map((period) => {
+          const day = dayjs(period.startTime).format(`dddd`);
+          const time = new Date(period.startTime).getHours();
+          const formattedTime = time > 12 ? `${time - 12}PM` : time === 0 ? `12AM` : `${time}AM`;
 
-          filteredData.map((period) => {
-            const startDate = new Date(period.startTime).getHours();
-            const periodStart = startDate > 12 ? `${startDate - 12}PM` : startDate === 0 ? `12AM` : `${startDate}AM`;
-
-            return (
-              <div key={period.number} className="bg-gray-800 rounded-xl">
-                <img src={period.icon} alt="Weather icon" className="w-full h-32 object-cover rounded-t-lg" />
-                <div className='p-4'>
-                  <h3 className="font-bold mb-2">{periodStart}</h3>
-                  <p className="mb-1">T: {period.temperature}{period.temperatureUnit}</p>
-                  <p className="mb-1">W: {period.windDirection} {period.windSpeed}</p>
-                  <p className="text-xs">{period.shortForecast}</p>
-                </div>
+          return (
+            <div key={period.number} className="flex bg-gray-800 rounded-xl items-start pr-4 shadow-2xl
+             border-gray-500 duration-300 focus:translate-x-4">
+              <img src={period.icon} alt="Weather icon" className="w-28 h-full rounded-l-xl" />
+              <div className='ml-4 w-full h-full flex flex-row items-center justify-center'>
+                <HourlyForecastItem label={day} value={formattedTime} />
+                <HourlyForecastItem label="Temperature" value={`${period.temperature}°${period.temperatureUnit}`} />
+                <HourlyForecastItem label="Wind" value={`${period.windSpeed} ${period.windDirection}`} />
+                <HourlyForecastItem label="Precipitation" value={`${period.probabilityOfPrecipitation.value}%`} />
+                <HourlyForecastItem label="Humidity" value={`${period.relativeHumidity.value}%`} />
+                <HourlyForecastItem label="Forecast" value={period.detailedForecast ?
+                  period.detailedForecast : period.shortForecast} />
               </div>
-            );
-          })
-
-          // ...
+            </div>
+          );
+        })
         }
       </div>
     </div>
   );
 };
 
-export default HourlyForecast;
+const HourlyForecastItem: React.FC<{ label: string, value: string }> = ({ label, value }) =>
+  <div className='basis-1/6'>
+    <div className="font-light text-xs text-center">{label}</div>
+    <h3 className="font-bold mb-2 text-center">{value}</h3>
+  </div>;
+
+const MemoizedHourlyForecast = React.memo(HourlyForecast);
+
+export default MemoizedHourlyForecast;
