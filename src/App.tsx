@@ -1,6 +1,8 @@
-import AddressForm from './components/AddressForm';
+import AddressInput from './components/AddressInput';
 import { ForeCastProvider } from './context/ForecastProvider';
 import './App.css';
+// import HourlyForecast from './components/HourlyForecast';
+import MapComponent from './components/Map';
 import DailyForecast from './components/DailyForecast';
 
 export interface forecastResponseUrls {
@@ -11,7 +13,9 @@ function App() {
 
   return (
     <ForeCastProvider>
-      <AddressForm />
+      <AddressInput />
+      <MapComponent />
+      {/* <HourlyForecast /> */}
       <DailyForecast />
     </ForeCastProvider>
   );
