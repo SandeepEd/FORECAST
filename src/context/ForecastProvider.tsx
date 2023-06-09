@@ -6,7 +6,7 @@ interface IForeCastContext {
   coordinates: { lat: number, lon: number } | null;
   setCoordinates: React.Dispatch<React.SetStateAction<{ lat: number, lon: number } | null>>;
   forecastData: ForecastResult | null| undefined;
-  dailyForecastData: ForecastResult | null| undefined;
+  hourlyForecastData: ForecastResult | null| undefined;
 }
 
 const ForeCastContext = createContext<IForeCastContext | null>(null);
@@ -21,7 +21,7 @@ const ForeCastProvider = ({ children }: { children: ReactNode }) => {
   return <ForeCastContext.Provider value={{
     coordinates,
     setCoordinates,
-    dailyForecastData,
+    hourlyForecastData: dailyForecastData,
     forecastData,
   }}>
     {children}
