@@ -5,9 +5,9 @@ import { useForeCastContext } from '../context/ForecastProvider';
 
 const dates = Array.from({ length: 7 }, (_, i) => dayjs().add(i, `day`).format(`YYYY-MM-DD`));
 
-const HourlyForecast: React.FC = () => {
+const HourlyForecast: React.FC<{ selectedDay: string }> = ({ selectedDay }) => {
   const { hourlyForecastData: weatherData } = useForeCastContext();
-  const [ selectedDate, setSelectedDate ] = useState(dayjs().format(`YYYY-MM-DD`));
+  const [ selectedDate, setSelectedDate ] = useState(selectedDay);
   const [ filteredData, setFilteredData ] = useState<Periods[]>([]);
 
   useEffect(() => {
