@@ -2,7 +2,7 @@ import React from 'react';
 import { useForeCastContext } from '../context/ForecastProvider';
 import { GeoCodingService } from '../services/GeoCodingService';
 
-const AddressForm: React.FC = () => {
+const AddressInput: React.FC = () => {
 
   const [ address, setAddress ] = React.useState(``);
   const { setCoordinates } = useForeCastContext();
@@ -19,7 +19,7 @@ const AddressForm: React.FC = () => {
       <input
         value={address}
         onChange={(e) => setAddress(e.target.value)}
-        className="shadow-lg w-4/6 border-2 border-gray-300 bg-white h-10 px-5 pr-16 rounded-lg text-sm"
+        className="shadow-lg w-4/6 border-2 text-black border-gray-300 bg-white h-10 px-5 pr-16 rounded-lg text-sm"
         type="search" name="search" placeholder="Search" />
       <button onClick={() => handleSubmit()} type="submit" className="border-spacing-2 rounded-xl bg-sky-500
         text-black p-2 ml-2">
@@ -30,4 +30,4 @@ const AddressForm: React.FC = () => {
   );
 };
 
-export default AddressForm;
+export default AddressInput;
